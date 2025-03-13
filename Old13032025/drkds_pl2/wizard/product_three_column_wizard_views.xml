@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View for the Wizard -->
+    <record id="view_product_three_column_wizard_form" model="ir.ui.view">
+        <field name="name">drkds_pl2.product_three_column_wizard.form</field>
+        <field name="model">drkds_pl2.product_three_column_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Product Three Column Report">
+                <field name="doc_id" invisible="1"/>
+                <field name="is_multi_product" invisible="1"/>
+                <group>
+                    <group>
+                        <field name="customer_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="contact_id" options="{'no_create': True, 'no_open': True}"/>
+                    </group>
+                    <group>
+                        <field name="salesman_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="price_level"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_print_report" string="Print Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open the Wizard -->
+    <record id="action_product_three_column_wizard" model="ir.actions.act_window">
+        <field name="name">Product Three Column Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">drkds_pl2.product_three_column_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_mrp_bom_cost_calculator"/>
+        <field name="binding_view_types">form</field>
+    </record>
+</odoo>

@@ -1,0 +1,20 @@
+<!-- data/mrp_bom_cost_calculator_data.xml -->
+<odoo>
+    <data noupdate="1">
+        <!-- Sequence for BOM Cost Calculator -->
+        <record id="seq_mrp_bom_cost_calculator" model="ir.sequence">
+            <field name="name">BOM Cost Calculator</field>
+            <field name="code">mrp.bom.cost.calculator</field>
+            <field name="prefix">COST/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+		<record id="seq_product_report_log" model="ir.sequence">
+            <field name="name">Product Report Log</field>
+            <field name="code">drkds_pl2.product_report_log</field>
+            <field name="prefix">RPT/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- report/bom_cost_calculator_report.xml -->
+<odoo>
+    <template id="report_bom_cost_calculation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>BOM Cost Calculation</h2>
+                        <div class="row mt32 mb32">
+                            <div class="col-3">
+                                <strong>Reference:</strong>
+                                <p t-field="o.name"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Product:</strong>
+                                <p t-field="o.product_id"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>BOM:</strong>
+                                <p t-field="o.bom_id"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Date:</strong>
+                                <p t-field="o.date"/>
+                            </div>
+                        </div>
+
+                        <h3>Cost Details</h3>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Type</th>
+                                    <th>Level</th>
+                                    <th class="text-right">Quantity</th>
+                                    <th class="text-right">Duration</th>
+                                    <th class="text-right">Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.cost_details_ids" t-as="line">
+                                    <tr>
+                                        <td>
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.cost_type"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.bom_level"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.quantity"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.duration"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.cost"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" class="text-right">
+                                        <strong>Total Material Cost:</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.total_material_cost"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-right">
+                                        <strong>Total Operation Cost:</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="o.total_operation_cost"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-right">
+                                        <strong>Total Cost:</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-field="o.total_cost"/>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_bom_cost_calculation" model="ir.actions.report">
+    <field name="name">BOM Cost Calculation</field>
+    <field name="model">mrp.bom.cost.calculator</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">drkds_pl2.report_bom_cost_calculation</field>
+    <field name="report_file">drkds_pl2.report_bom_cost_calculation</field>
+	 <field name="print_report_name">'BOM Cost Calculation - %s' % object.name</field>
+    <field name="binding_model_id" ref="model_mrp_bom_cost_calculator"/>
+    <field name="binding_type">report</field>
+</record>
+</odoo>

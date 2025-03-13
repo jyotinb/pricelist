@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<record id="a4_pl" model="report.paperformat">
+        <field name="name">Custom A4 PL</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+    <record id="action_report_bom_cost_calculator" model="ir.actions.report">
+        <field name="name">BOM Cost Calculator Report</field>
+        <field name="model">mrp.bom.cost.calculator</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">drkds_pl2.report_bom_cost_calculator_document</field>
+        <field name="report_file">drkds_pl2.report_bom_cost_calculator_document</field>
+        <field name="binding_model_id" ref="drkds_pl2.model_mrp_bom_cost_calculator"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'BOM Cost Calculator - %s' % (object.name)</field>
+    </record>
+	<record id="action_report_product_three_column" model="ir.actions.report">
+    <field name="name">Product Three Column Report</field>
+    <field name="model">mrp.bom.cost.calculator</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">drkds_pl2.report_product_three_column_document</field>
+    <field name="report_file">drkds_pl2.report_product_three_column_document</field>
+    <field name="binding_model_id" ref="drkds_pl2.model_mrp_bom_cost_calculator"/>
+    <field name="binding_type">report</field>
+    <field name="print_report_name">'3-Column Product Report - %s' % (object.name)</field>
+</record>
+</odoo>

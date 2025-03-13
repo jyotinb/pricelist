@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- views/bom_cost_calculator_views.xml -->
+<odoo>
+	 <record id="access_mrp_bom_cost_calculator_product_line_user" model="ir.model.access">
+        <field name="name">mrp.bom.cost.calculator.product.line user</field>
+        <field name="model_id" ref="model_mrp_bom_cost_calculator_product_line"/>
+        <field name="group_id" ref="base.group_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <!-- Manager Rights -->
+    <record id="access_mrp_bom_cost_calculator_product_line_manager" model="ir.model.access">
+        <field name="name">mrp.bom.cost.calculator.product.line manager</field>
+        <field name="model_id" ref="model_mrp_bom_cost_calculator_product_line"/>
+        <field name="group_id" ref="mrp.group_mrp_manager"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+	 <record id="access_product_selection_wizard_user" model="ir.model.access">
+        <field name="name">product.selection.wizard user</field>
+        <field name="model_id" ref="model_product_selection_wizard"/>
+        <field name="group_id" ref="base.group_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+	
+    <!-- Tree View -->
+    <record id="view_bom_cost_calculator_tree" model="ir.ui.view">
+        <field name="name">mrp.bom.cost.calculator.tree</field>
+        <field name="model">mrp.bom.cost.calculator</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="product_id"/>
+                <field name="bom_id"/>
+                <field name="total_material_cost"/>
+                <field name="total_operation_cost"/>
+				<field name="other_cost" />
+                <field name="total_cost" widget="monetary"/>
+				<field name="unit_cost"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <!-- Form View -->
+<record id="view_bom_cost_calculator_form" model="ir.ui.view">
+    <field name="name">mrp.bom.cost.calculator.form</field>
+    <field name="model">mrp.bom.cost.calculator</field>
+    <field name="arch" type="xml">
+        <form edit="0">
+            <header>
+				<field name="is_multi_product" invisible="1"/>
+
+                <button name="action_calculate_cost" 
+                        string="Calculate Cost" 
+                        type="object" 
+                        class="oe_highlight"
+                        invisible="state != 'draft'"/>
+               <!--  <button name="action_apply_cost" 
+                        string="Apply Cost" 
+                        type="object" 
+                        class="oe_highlight"
+                        invisible="state != 'calculated'"/> -->
+                <field name="state" widget="statusbar"/>
+            </header>
+            <sheet>
+                <div class="oe_title">
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </div>
+                <group>
+                    <group>
+                        <field name="product_id"/>
+                        <field name="product_tmpl_id" invisible="1"/>
+						<field name="bom_id" context="{'default_product_tmpl_id': product_tmpl_id}"/>
+                        <field name="include_operations"/>
+                    </group>
+                    <group >
+                        <field name="date"/>
+                        <field name="total_material_cost"  class="text-end" style="width: 100px !important;" invisible="is_multi_product"/>
+                        <field name="total_operation_cost"  class="text-end" style="width: 100px !important;"  invisible="is_multi_product"/>
+						<field name="other_cost"  class="text-end" style="width: 100px !important;"  invisible="is_multi_product"/>
+                        <field name="total_cost"  class="text-end" style="width: 100px !important;"  invisible="is_multi_product"/>
+						<field name="unit_cost"  class="text-end" style="width: 100px !important;"  invisible="is_multi_product"/>
+                    </group>
+                </group>
+                <notebook  >
+                    <page string="Cost Details">
+                        <field name="cost_details_ids"  invisible="is_multi_product">
+                            <tree create="0" edit="0">
+                                <field name="name"/>
+                                <field name="cost_type"/>
+                                <field name="product_id"/>
+                                <field name="operation_id"/>
+                                <field name="quantity"/>
+                                <field name="duration"/>
+                                <field name="unit_cost"/>
+                                <field name="cost"/>
+                                <field name="bom_level"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+    <!-- Search View -->
+    <record id="view_bom_cost_calculator_search" model="ir.ui.view">
+        <field name="name">mrp.bom.cost.calculator.search</field>
+        <field name="model">mrp.bom.cost.calculator</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="bom_id"/>
+                <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="Calculated" name="calculated" domain="[('state','=','calculated')]"/>
+                <filter string="Applied" name="applied" domain="[('state','=','applied')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_state" context="{'group_by':'state'}"/>
+                    <filter string="Product" name="group_by_product" context="{'group_by':'product_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_bom_cost_calculator" model="ir.actions.act_window">
+        <field name="name">BOM Cost Calculator</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mrp.bom.cost.calculator</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_bom_cost_calculator_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new BOM cost calculation
+            </p>
+        </field>
+    </record>
+	
+	   <record id="view_bom_cost_calculator_form_inherit" model="ir.ui.view">
+        <field name="name">mrp.bom.cost.calculator.form.inherit</field>
+        <field name="model">mrp.bom.cost.calculator</field>
+        <field name="inherit_id" ref="drkds_pl2.view_bom_cost_calculator_form"/>
+        <field name="arch" type="xml">
+            <field name="date" position="after">
+                <field name="is_multi_product"/>
+            </field>
+
+            <field name="product_id" position="attributes">
+                <attribute name="invisible">is_multi_product</attribute>
+                <attribute name="required" eval="True"/>
+            </field>
+            
+            <field name="bom_id" position="attributes">
+                <attribute name="invisible">is_multi_product</attribute>
+                <attribute name="required" eval="True"/>
+            </field>
+
+            <xpath expr="//field[@name='cost_details_ids']" position="before">
+                <group invisible="not is_multi_product">
+                    <group>
+                        <button string="Add Products" 
+                                name="add_products_wizard" 
+                                type="object" 
+                                class="btn btn-secondary"
+								invisible="state != 'draft'"/>
+                    </group>
+                    <field name="product_line_ids" nolabel="1" field_id="product_line_ids_0">
+						<tree create="0" edit="0"  delete="0" open="0">
+							<field name="product_id" readonly="1"/>
+							<field name="is_manufacture" readonly="state != 'draft'"/>
+							<field name="bom_id" readonly="state != 'draft'" invisible="not is_manufacture" required="is_manufacture"/>
+							<field name="material_cost" readonly="state != 'draft'"/>
+							<field name="operation_cost" readonly="state != 'draft'"/>
+							<button name="action_open_additional_costs" 
+									string="Additional Costs" 
+									type="object" 
+									icon="fa-money"
+									class="btn btn-link"/>
+							<field name="other_cost"/>
+							<field name="total_cost" widget="monetary"/>
+							<field name="unit_cost"/>
+							<field name="state"/>
+							<!-- <button name="action_reset_to_draft"  -->
+									<!-- string="Reset to Draft"  -->
+									<!-- type="object" -->
+									<!-- icon="fa-undo" -->
+									<!-- invisible="state == 'draft'" -->
+									<!-- class="btn btn-link"/> -->
+						</tree>
+					</field>
+					
+                </group>
+            </xpath>
+
+            <button name="action_calculate_cost" position="attributes">
+                <attribute name="invisible">is_multi_product</attribute>
+            </button>
+            
+            <!-- <button name="action_apply_cost" position="attributes">
+                <attribute name="invisible">is_multi_product</attribute>
+            </button> -->
+
+            <button name="action_calculate_cost" position="after">
+                <button name="action_calculate_all_costs" 
+                    string="Calculate All Costs" 
+                    type="object" 
+                    class="oe_highlight"
+                    invisible="not is_multi_product or state != 'draft'"/>
+               <!--  <button name="action_apply_all_costs" 
+                    string="Apply All Costs" 
+                    type="object" 
+                    class="oe_highlight"
+                    invisible="not is_multi_product or state != 'calculated'"/> -->
+            </button>
+        </field>
+    </record>
+	
+	
+	
+
+    <!-- Add the new parent menu "Price List" to Manufacturing -->
+
+
+<!-- Add "BOM Cost Calculator" as sub-menu under "Price List" -->
+<menuitem id="menu_bom_cost_calculator"
+          name="BOM Cost Calculator"
+          action="action_bom_cost_calculator"
+          parent="drkds_rm_prices.menu_mrp_price_list"
+          sequence="10"/>
+</odoo>

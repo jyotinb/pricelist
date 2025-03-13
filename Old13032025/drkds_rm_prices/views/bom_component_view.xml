@@ -1,0 +1,79 @@
+<odoo>
+    <!-- Access Rights -->
+    <record id="access_bom_components_user" model="ir.model.access">
+        <field name="name">BOM Components User Access</field>
+        <field name="model_id" ref="mrp.model_mrp_bom_line"/>
+        <field name="group_id" ref="drkds_pl2.group_price_list_manager"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+    </record>
+
+    <!-- List View -->
+    <record id="view_bom_component_tree" model="ir.ui.view">
+    <field name="name">bom.component.tree</field>
+    <field name="model">mrp.bom.line</field>
+    <field name="priority">100</field>
+    <field name="arch" type="xml">
+        <tree string="BOM Components Without Sub BOM" create="0" delete="0" edit="0">
+            <field name="company_id" invisible="1" optional="hide"/>
+            <field name="product_id" string="Component"/>
+            <field name="parent_product_tmpl_id" string="Direct Parent" optional="hide"/>
+            <field name="top_parent_products" string="Top Parents" optional="show"/>
+            <field name="standard_price" string="Cost" widget="monetary"/>
+            <button name="%(action_product_cost_wizard)d" 
+                    string="Edit Cost" 
+                    type="action" 
+                    icon="fa-pencil"
+                    class="btn btn-link"/>
+        </tree>
+    </field>
+</record>
+
+    <!-- Search View -->
+    <record id="view_bom_component_search" model="ir.ui.view">
+        <field name="name">bom.component.search</field>
+        <field name="model">mrp.bom.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id"/>
+                <field name="parent_product_tmpl_id"/>
+                <field name="top_parent_products"/>
+                <group expand="0" string="Group By">
+                    <filter string="Component" name="groupby_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Direct Parent" name="groupby_parent" context="{'group_by': 'parent_product_tmpl_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="view_bom_component_action" model="ir.actions.act_window">
+        <field name="name">BOM Components Without Sub BOM</field>
+        <field name="res_model">mrp.bom.line</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_bom_component_search"/>
+        <field name="domain">[('product_id.product_tmpl_id.bom_ids', '=', False)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No components found without sub BOMs
+            </p>
+            <p>
+                This view shows all BOM components that don't have their own Bill of Materials.
+            </p>
+        </field>
+    </record>
+	<menuitem id="menu_mrp_price_list"
+          name="Price List"
+          parent="mrp.menu_mrp_manufacturing"
+		  groups="drkds_pl2.group_price_list_user,drkds_pl2.group_price_list_manager"
+          sequence="45"/>
+
+    <menuitem id="menu_mrp_bom_component"
+          name="BOM Components Without Sub BOM"
+          action="view_bom_component_action"
+          parent="menu_mrp_price_list"
+          groups="drkds_pl2.group_price_list_manager"
+          sequence="20"/>
+</odoo>

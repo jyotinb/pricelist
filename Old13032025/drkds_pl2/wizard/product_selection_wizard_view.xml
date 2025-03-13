@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="view_product_selection_wizard_form" model="ir.ui.view">
+		<field name="name">product.selection.wizard.form</field>
+		<field name="model">product.selection.wizard</field>
+		<field name="arch" type="xml">
+		<form string="Select Products">
+			<group>
+				<field name="product_ids" widget="many2many_tags"/>
+			</group>
+			<footer>
+				<button string="Add Products" name="action_add_products" type="object" class="btn-primary"/>
+				<button string="Cancel" class="btn-secondary" special="cancel"/>
+			</footer>
+		</form>
+		</field>
+	</record>
+
+    <!-- Access rights for the wizard model -->
+    <record id="access_product_additional_cost_wizard_user" model="ir.model.access">
+        <field name="name">product.additional.cost.wizard user</field>
+        <field name="model_id" ref="model_product_additional_cost_wizard"/>
+        <field name="group_id" ref="base.group_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <!-- Form View for the wizard -->
+    <record id="view_product_additional_cost_wizard_form" model="ir.ui.view">
+        <field name="name">product.additional.cost.wizard.form</field>
+        <field name="model">product.additional.cost.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Additional Costs">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="product_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="line_id" invisible="1"/>
+                        <field name="jobwork_cost"/>
+                        <field name="freight_cost"/>
+                        <field name="packing_cost"/>
+                        <field name="cushion"/>
+                        <field name="gross_profit_add"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_save_additional_costs" string="Save to Calculation" type="object" class="btn-primary"/>
+                    <button name="action_save_and_update_product" string="Save to Calculation and Product" type="object" class="btn-success"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for opening the wizard -->
+    <record id="action_open_product_additional_cost_wizard" model="ir.actions.act_window">
+        <field name="name">Additional Costs</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.additional.cost.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_mrp_bom_cost_calculator_product_line"/>
+    </record>
+</odoo>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Access rights for the Raw Materials Editor wizard -->
+    <record id="access_raw_materials_editor_wizard_user" model="ir.model.access">
+        <field name="name">raw.materials.editor.wizard user</field>
+        <field name="model_id" ref="model_raw_materials_editor_wizard"/>
+        <field name="group_id" ref="base.group_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+    
+    <record id="access_raw_materials_editor_line_user" model="ir.model.access">
+        <field name="name">raw.materials.editor.line user</field>
+        <field name="model_id" ref="model_raw_materials_editor_line"/>
+        <field name="group_id" ref="base.group_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <!-- Form View for the Raw Materials Editor wizard -->
+    <record id="view_raw_materials_editor_wizard_form" model="ir.ui.view">
+        <field name="name">raw.materials.editor.wizard.form</field>
+        <field name="model">raw.materials.editor.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="product_id"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="line_id" invisible="1"/>
+                        <field name="bom_id"/>
+                        <field name="is_calculated" invisible="1"/>
+                    </group>
+                    <div>
+                        <p class="alert alert-info" role="alert">
+                            This wizard shows all raw materials used in the current BOM and its sub-BOMs.
+                            You can update standard prices for any material that doesn't have its own BOM.
+                            Use "Recalculate Values" to see the impact of price changes without saving.
+                        </p>
+                    </div>
+                    <button name="action_recalculate_values" 
+                            string="Recalculate Values" 
+                            type="object" 
+                            class="btn btn-info mb-2"
+                            invisible="is_calculated"/>
+                    <field name="material_line_ids" readonly="is_calculated">
+                        <tree editable="bottom" decoration-danger="price_difference != 0">
+                            <field name="product_id"/>
+                            <field name="current_price"/>
+                            <field name="new_price" readonly="parent.is_calculated"/>
+                            <field name="quantity"/>
+                            <field name="total_value"/>
+                            <field name="price_difference" widget="percentage"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_update_calculation_only" 
+                            string="Update for Current Calculation Only" 
+                            type="object" 
+                            class="btn-primary"
+                            invisible="is_calculated"/>
+                    <button name="action_update_product_master" 
+                            string="Update in Product Master" 
+                            type="object" 
+                            class="btn-danger"
+                            invisible="is_calculated"
+                            confirm="This will permanently update the standard prices in the product master data, affecting all calculations in the system. Are you sure?"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for opening the Raw Materials Editor wizard -->
+    <record id="action_open_raw_materials_editor_wizard" model="ir.actions.act_window">
+        <field name="name">Edit Raw Material Prices</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">raw.materials.editor.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_mrp_bom_cost_calculator_product_line"/>
+    </record>
+</odoo>

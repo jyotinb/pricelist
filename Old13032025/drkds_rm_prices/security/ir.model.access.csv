@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mrp_bom_line_manager,mrp.bom.line manager,model_mrp_bom_line,drkds_pl2.group_price_list_manager,1,1,1,1
+access_product_cost_wizard_manager,product.cost.wizard.manager,model_product_cost_wizard,drkds_pl2.group_price_list_manager,1,1,1,1

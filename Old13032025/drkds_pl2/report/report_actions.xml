@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Report Action -->
+    <record id="action_report_product_three_column" model="ir.actions.report">
+        <field name="name">Product Three Column Report</field>
+        <field name="model">mrp.bom.cost.calculator</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">drkds_pl2.report_product_three_column</field>
+        <field name="report_file">drkds_pl2.report_product_three_column</field>
+        <field name="binding_model_id" ref="model_mrp_bom_cost_calculator"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Product Three Column Report - %s' % (object.name)</field>
+    </record>
+</odoo>

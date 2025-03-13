@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Update the BOM Cost Calculator Form View to add the button for detailed cost view -->
+    <record id="view_bom_cost_calculator_form_inherit_details" model="ir.ui.view">
+        <field name="name">mrp.bom.cost.calculator.form.inherit.details</field>
+        <field name="model">mrp.bom.cost.calculator</field>
+        <field name="inherit_id" ref="drkds_pl2.view_bom_cost_calculator_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_line_ids']/tree" position="inside">
+                <button name="action_view_cost_details" 
+                        string="View Details" 
+                        type="object" 
+                        icon="fa-list"
+                        class="btn btn-link"
+                        invisible="state == 'draft'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
