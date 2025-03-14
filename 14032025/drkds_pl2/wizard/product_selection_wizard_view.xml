@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Access Rights for Product Selection Wizard -->
+    <record id="access_product_selection_wizard_user" model="ir.model.access">
+        <field name="name">Product Selection Wizard User</field>
+        <field name="model_id" ref="model_product_selection_wizard"/>
+        <field name="group_id" ref="base.group_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <!-- Form View for Product Selection Wizard -->
+    <record id="view_product_selection_wizard_form" model="ir.ui.view">
+        <field name="name">product.selection.wizard.form</field>
+        <field name="model">product.selection.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Select Products">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Select Products for Pricelist</h1>
+                    </div>
+                    
+                    <!-- Hidden field for calculator reference -->
+                    <field name="calculator_id" invisible="1"/>
+                    
+                    <!-- Product Selection -->
+                    <group>
+                        <field name="product_ids" 
+                               widget="many2many_tags" 
+                               options="{'no_create': True, 'no_open': True}"
+                               domain="[
+                                   ('sale_ok', '=', True),
+                                   ('type', '=', 'product'),
+                                   ('include_in_pricelist', '=', True)
+                               ]"
+                               help="Select products included in the pricelist for cost calculation"/>
+                    </group>
+                    
+                    <!-- Helper Text -->
+                    <div class="alert alert-info" role="alert">
+                        <p>
+                            <strong>Note:</strong> 
+                            Only products marked for inclusion in pricelist can be selected.
+                            Ensure the 'Include in Pricelist' checkbox is checked for the desired products.
+                        </p>
+                    </div>
+                </sheet>
+                
+                <!-- Footer Actions -->
+                <footer>
+                    <button name="action_add_products" 
+                            string="Add Selected Products" 
+                            type="object" 
+                            class="btn-primary"/>
+                    <button string="Cancel" 
+                            class="btn-secondary" 
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Opening the Wizard -->
+    <record id="action_product_selection_wizard" model="ir.actions.act_window">
+        <field name="name">Select Pricelist Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.selection.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Select products for pricelist
+            </p>
+            <p>
+                Choose multiple products included in the pricelist for cost calculation.
+                Only products with 'Include in Pricelist' checked can be selected.
+            </p>
+        </field>
+    </record>
+</odoo>

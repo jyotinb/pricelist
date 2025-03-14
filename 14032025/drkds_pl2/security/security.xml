@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Price List User Group - Can only print reports -->
+        <record id="group_price_list_user" model="res.groups">
+            <field name="name">Price List User</field>
+            <field name="comment">Users who can only print price list reports</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+
+        <!-- Price List Manager Group - Can do everything -->
+        <record id="group_price_list_manager" model="res.groups">
+            <field name="name">Price List Manager</field>
+            <field name="comment">Managers who can manage all aspects of price lists</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+            <field name="implied_ids" eval="[(4, ref('group_price_list_user'))]"/>
+        </record>
+    </data>
+</odoo>

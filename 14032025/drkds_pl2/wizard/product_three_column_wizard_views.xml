@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Access Rights for Product Three Column Wizard -->
+    <record id="access_product_three_column_wizard_user" model="ir.model.access">
+        <field name="name">Product Three Column Wizard User</field>
+        <field name="model_id" ref="model_drkds_pl2_product_three_column_wizard"/>
+        <field name="group_id" ref="base.group_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <!-- Form View for Product Three Column Wizard -->
+    <record id="view_product_three_column_wizard_form" model="ir.ui.view">
+        <field name="name">drkds_pl2.product_three_column_wizard.form</field>
+        <field name="model">drkds_pl2.product_three_column_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Three Column Product Report">
+                <!-- Hidden Fields -->
+                <field name="doc_id" invisible="1"/>
+                <field name="is_multi_product" invisible="1"/>
+                
+                <!-- Main Content -->
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Three Column Product Report</h1>
+                    </div>
+                    
+                    <!-- Customer and Contact Information -->
+                    <group>
+                        <group string="Customer Details" name="customer_group">
+                            <field name="customer_id" 
+                                   options="{'no_create': True, 'no_open': False}"
+                                   required="1"
+                                   domain="[('customer_rank', '>', 0)]"
+                                   help="Select the customer for the report"/>
+                            
+                            <field name="contact_id" 
+                                   options="{'no_create': True, 'no_open': False}"
+                                   domain="[('parent_id', '=', customer_id), ('type', '=', 'contact')]"
+                                   help="Optional contact person for the customer"/>
+                        </group>
+                        
+                        <group string="Sales Information" name="sales_group">
+                            <field name="salesman_id" 
+                                   required="1"
+                                   options="{'no_create': True, 'no_open': False}"
+                                   domain="[('share', '=', False)]"
+                                   help="Select the responsible salesperson"/>
+                            
+                            <field name="price_level" 
+                                   required="1"
+                                   help="Choose the price level for the report"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Informative Note -->
+                    <div class="alert alert-info" role="alert" style="margin-top: 10px;">
+                        <p>
+                            <strong>Note:</strong>
+                            This report will generate a three-column view of products 
+                            based on the selected cost calculation document.
+                        </p>
+                    </div>
+                </sheet>
+                
+                <!-- Footer Actions -->
+                <footer>
+                    <button name="action_print_report" 
+                            string="Generate Report" 
+                            type="object" 
+                            class="btn-primary"/>
+                    
+                    <button string="Cancel" 
+                            class="btn-secondary" 
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to Open the Wizard -->
+    <record id="action_product_three_column_wizard" model="ir.actions.act_window">
+        <field name="name">Three Column Product Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">drkds_pl2.product_three_column_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_mrp_bom_cost_calculator"/>
+        <field name="binding_view_types">form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Generate a Three Column Product Report
+            </p>
+            <p>
+                Create a detailed report with product information, 
+                prices, and additional details for your selected customers.
+            </p>
+        </field>
+    </record>
+</odoo>

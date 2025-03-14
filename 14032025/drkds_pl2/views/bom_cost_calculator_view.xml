@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+   <record id="view_bom_cost_calculator_form_inherit_multi" model="ir.ui.view">
+    <field name="name">mrp.bom.cost.calculator.form.inherit.multi</field>
+    <field name="model">mrp.bom.cost.calculator</field>
+    <field name="inherit_id" ref="drkds_pl2.view_bom_cost_calculator_form"/>
+    <field name="arch" type="xml">
+        <!-- Add button to header -->
+        <!-- <xpath expr="//header" position="inside">
+            <button name="%(action_report_bom_cost_calculator)d" 
+                    string="Print Report" 
+                    type="action" 
+                    class="btn-primary"
+                    invisible="state not in ['calculated', 'applied']"/>
+        </xpath> -->
+        
+        <!-- Add multi-product section in notebook -->
+        <xpath expr="//notebook" position="inside">
+            <page string="Products" invisible="not is_multi_product">
+                <field name="product_line_ids">
+                    <tree>
+                        <field name="product_id"/>
+                        <field name="bom_id"/>
+                        <field name="material_cost"/>
+                        <field name="operation_cost"/>
+                        <field name="other_cost"/>
+                        <field name="total_cost"/>
+                        <field name="state"/>
+                    </tree>
+                </field>
+            </page>
+        </xpath>
+    </field>
+</record>
+ <record id="view_bom_cost_calculator_form_report_button" model="ir.ui.view">
+        <field name="name">mrp.bom.cost.calculator.form.report.button</field>
+        <field name="model">mrp.bom.cost.calculator</field>
+        <field name="inherit_id" ref="drkds_pl2.view_bom_cost_calculator_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_product_report_wizard" 
+                        string="PL Report" 
+                        type="object" 
+                        class="btn-primary"
+						groups="drkds_pl2.group_price_list_user,drkds_pl2.group_price_list_manager"
+                        invisible="state not in ['calculated', 'applied']"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

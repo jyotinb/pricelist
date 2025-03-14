@@ -1,0 +1,34 @@
+<odoo>
+    <!-- Window Action - Defines how the view opens -->
+    <record id="action_product_without_bom" model="ir.actions.act_window">
+        <field name="name">Products Without BOM</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('type','=','product'),     <!-- Only storable products -->
+            ('has_bom','=',False)       <!-- Without BOMs -->
+        ]</field>
+    </record>
+
+    <!-- Tree View - Defines the list view -->
+    <record id="view_product_without_bom_tree" model="ir.ui.view">
+        <field name="name">product.without.bom.tree</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="default_code"/>  <!-- Internal Reference -->
+                <field name="name"/>          <!-- Product Name -->
+                <field name="standard_price"/> <!-- Cost -->
+                <field name="qty_available"/>  <!-- Stock Quantity -->
+                <field name="uom_id"/>        <!-- Unit of Measure -->
+            </tree>
+        </field>
+    </record>
+
+    <!-- Menu Item - Adds menu in Manufacturing -->
+    <menuitem id="menu_product_without_bom"
+              name="Products Without BOM"
+              action="action_product_without_bom"
+              parent="mrp.menu_mrp_manufacturing"
+              sequence="5"/>
+</odoo>

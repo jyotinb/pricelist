@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- data/mrp_bom_cost_calculator_data.xml -->
+<odoo>
+    <data noupdate="1">
+        <!-- 
+        Sequences for BOM Cost Calculator module
+        Implementation: 1.0
+        -->
+        
+        <!-- Sequence for BOM Cost Calculator references (COST/00001, COST/00002, etc.) -->
+        <record id="seq_mrp_bom_cost_calculator" model="ir.sequence">
+            <field name="name">BOM Cost Calculator</field>
+            <field name="code">mrp.bom.cost.calculator</field>
+            <field name="prefix">COST/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="active" eval="True"/>
+            <field name="use_date_range" eval="False"/>
+            <field name="implementation">standard</field>
+        </record>
+        
+        <!-- Sequence for Product Report Log tracking (RPT/2025/0001, RPT/2025/0002, etc.) -->
+        <record id="seq_product_report_log" model="ir.sequence">
+            <field name="name">Product Report Log</field>
+            <field name="code">drkds_pl2.product_report_log</field>
+            <field name="prefix">RPT/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+            <field name="active" eval="True"/>
+            <field name="use_date_range" eval="True"/>
+            <field name="implementation">standard</field>
+        </record>
+    </data>
+</odoo>

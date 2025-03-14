@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Access Rights for Additional Cost Wizard -->
+    <record id="access_product_additional_cost_wizard_user" model="ir.model.access">
+        <field name="name">Product Additional Cost Wizard User</field>
+        <field name="model_id" ref="model_product_additional_cost_wizard"/>
+        <field name="group_id" ref="base.group_user"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <!-- Form View for Product Additional Cost Wizard -->
+    <record id="view_product_additional_cost_wizard_form" model="ir.ui.view">
+        <field name="name">product.additional.cost.wizard.form</field>
+        <field name="model">product.additional.cost.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <!-- Header with Product Information -->
+                    <div class="oe_title">
+                        <h1>
+                            <field name="product_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    
+                    <!-- Hidden Fields -->
+                    <field name="line_id" invisible="1"/>
+                    <field name="is_calculated" invisible="1"/>
+                    
+                    <!-- Cost Sections -->
+                    <notebook>
+                        <!-- Basic Costs Section -->
+                        <page string="Basic Costs">
+                            <group>
+                                <group string="Direct Costs">
+                                    <field name="jobwork_cost" 
+                                           readonly="is_calculated"
+                                           groups="drkds_pl2.group_price_list_manager"/>
+                                    <field name="freight_cost" 
+                                           readonly="is_calculated"
+                                           groups="drkds_pl2.group_price_list_manager"/>
+                                    <field name="packing_cost" 
+                                           readonly="is_calculated"
+                                           groups="drkds_pl2.group_price_list_manager"/>
+                                </group>
+                                <group string="Additional Margins">
+                                    <field name="cushion" 
+                                           readonly="is_calculated"
+                                           groups="drkds_pl2.group_price_list_manager"/>
+                                    <field name="gross_profit_add" 
+                                           readonly="is_calculated"
+                                           groups="drkds_pl2.group_price_list_manager"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <!-- Price Levels Section -->
+                        <page string="Price Levels">
+                            <group>
+                                <group string="Level Additions">
+                                    <field name="level1Add" 
+                                           readonly="is_calculated"
+                                           groups="drkds_pl2.group_price_list_manager"/>
+                                    <field name="level2Add" 
+                                           readonly="is_calculated"
+                                           groups="drkds_pl2.group_price_list_manager"/>
+                                    <field name="level3Add" 
+                                           readonly="is_calculated"
+                                           groups="drkds_pl2.group_price_list_manager"/>
+                                    <field name="level4Add" 
+                                           readonly="is_calculated"
+                                           groups="drkds_pl2.group_price_list_manager"/>
+                                </group>
+                                <group string="Pricing Information">
+                                    <field name="include_in_pricelist" 
+                                           readonly="is_calculated"
+                                           groups="drkds_pl2.group_price_list_manager"/>
+                                    <field name="level1price" readonly="1"/>
+                                    <field name="level2price" readonly="1"/>
+                                    <field name="level3price" readonly="1"/>
+                                    <field name="level4price" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                
+                <!-- Footer Actions -->
+                <footer>
+                    <button name="action_save_additional_costs" 
+                            string="Save to Calculation" 
+                            type="object" 
+                            class="btn-primary"
+                            invisible="is_calculated"/>
+                    
+                    <button name="action_save_and_update_product" 
+                            string="Save to Calculation and Product" 
+                            type="object" 
+                            class="btn-success"
+                            invisible="is_calculated"/>
+                    
+                    <button string="Close" 
+                            class="btn-secondary" 
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Opening the Wizard -->
+    <record id="action_open_product_additional_cost_wizard" model="ir.actions.act_window">
+        <field name="name">Additional Costs</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.additional.cost.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_mrp_bom_cost_calculator_product_line"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage additional costs and pricing for products
+            </p>
+            <p>
+                Update job work, freight, packing costs, and set price levels 
+                for accurate product costing and pricing.
+            </p>
+        </field>
+    </record>
+</odoo>

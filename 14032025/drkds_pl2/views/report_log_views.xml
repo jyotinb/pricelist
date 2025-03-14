@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View for Product Report Log -->
+    <record id="view_product_report_log_tree" model="ir.ui.view">
+        <field name="name">drkds_pl2.product_report_log.tree</field>
+        <field name="model">drkds_pl2.product_report_log</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="Reference"/>
+                <field name="create_date" string="Generated On"/>
+                <field name="user_id"/>
+                <field name="customer_id"/>
+                <field name="contact_id"/>
+                <field name="salesman_id"/>
+                <field name="price_level"/>
+                <field name="doc_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Product Report Log -->
+    <record id="view_product_report_log_form" model="ir.ui.view">
+        <field name="name">drkds_pl2.product_report_log.form</field>
+        <field name="model">drkds_pl2.product_report_log</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group string="Report Details">
+                            <field name="user_id" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                            <field name="doc_id" readonly="1"/>
+                        </group>
+                        
+                        <group string="Customer Information">
+                            <field name="customer_id" readonly="1"/>
+                            <field name="contact_id" readonly="1"/>
+                            <field name="salesman_id" readonly="1"/>
+                            <field name="price_level" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View for Product Report Log -->
+    <record id="view_product_report_log_search" model="ir.ui.view">
+        <field name="name">drkds_pl2.product_report_log.search</field>
+        <field name="model">drkds_pl2.product_report_log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="customer_id"/>
+                <field name="contact_id"/>
+                <field name="salesman_id"/>
+                <field name="price_level"/>
+                
+                <filter string="My Logs" 
+                        name="my_logs" 
+                        domain="[('user_id','=',uid)]"/>
+                
+                <group expand="0" string="Group By">
+                    <filter string="User" 
+                            name="group_by_user" 
+                            context="{'group_by':'user_id'}"/>
+                    <filter string="Customer" 
+                            name="group_by_customer" 
+                            context="{'group_by':'customer_id'}"/>
+                    <filter string="Price Level" 
+                            name="group_by_price_level" 
+                            context="{'group_by':'price_level'}"/>
+                    <filter string="Month" 
+                            name="group_by_month" 
+                            context="{'group_by':'create_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action for Product Report Log -->
+    <record id="action_product_report_log" model="ir.actions.act_window">
+        <field name="name">Report Logs</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">drkds_pl2.product_report_log</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_product_report_log_search"/>
+        <field name="context">{'search_default_my_logs': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No report logs found.
+            </p>
+            <p>
+                This view shows a history of all product reports that have been generated.
+                Logs include details about the report, customer, and pricing information.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item for Report Logs -->
+    <menuitem id="menu_product_report_log"
+              name="Report Logs"
+              action="action_product_report_log"
+              parent="drkds_rm_prices.menu_mrp_price_list"
+              sequence="30"
+              groups="drkds_pl2.group_price_list_manager"/>
+</odoo>
