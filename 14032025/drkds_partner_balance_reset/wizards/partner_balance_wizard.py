@@ -156,33 +156,23 @@ class PartnerBalanceWizard(models.TransientModel):
         if not partner:
             return 0.0
             
-        # Calculate receivable balance
-        receivable_domain = [
+        # Get the balance up to the reset date
+        # In Odoo 17, the internal_type field has been changed to account_type
+        domain = [
             ('partner_id', '=', partner.id),
-            ('account_id.account_type', 'in', ['asset_receivable']),
+            ('account_id.account_type', 'in', ['asset_receivable' if account_type == 'receivable' else 'liability_payable']),
             ('move_id.state', '=', 'posted'),
             ('date', '<=', self.date)
         ]
         
-        receivable_lines = self.env['account.move.line'].search(receivable_domain)
-        receivable_balance = sum(receivable_lines.mapped('balance'))
+        lines = self.env['account.move.line'].search(domain)
+        balance = sum(lines.mapped('balance'))
         
-        # Calculate payable balance
-        payable_domain = [
-            ('partner_id', '=', partner.id),
-            ('account_id.account_type', 'in', ['liability_payable']),
-            ('move_id.state', '=', 'posted'),
-            ('date', '<=', self.date)
-        ]
-        
-        payable_lines = self.env['account.move.line'].search(payable_domain)
-        payable_balance = sum(payable_lines.mapped('balance'))
-        # For payables, the balance is typically negative in Odoo, so we don't invert the sign
-        
-        # Calculate net position (receivables - payables)
-        net_position = receivable_balance + payable_balance  # Note: payable_balance is already negative
-        
-        return net_position
+        # For payable accounts, we invert the sign to follow accounting convention
+        if account_type == 'payable':
+            balance = -balance
+            
+        return balance
     
     def action_reset_balances(self):
         self.ensure_one()
